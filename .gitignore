@@ -13,3 +13,7 @@
 
 .idea/
 /data
+
+# Uploaded files
+temp-images/*
+!temp-images/.git-keep
