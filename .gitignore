@@ -15,5 +15,5 @@
 /data
 
 # Uploaded files
-temp-images/*
-!temp-images/.git-keep
+uploads/*
+!uploads/.git-keep

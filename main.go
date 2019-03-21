@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"path/filepath"
 )
 
 func main() {
@@ -17,22 +18,17 @@ func setupRoutes() {
 }
 
 func uploadImage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Uploading Image\n")
+	fmt.Println("Uploading File...")
 
-	r.ParseMultipartForm(10 << 20)
-	file, _, err := r.FormFile("selectedImage")
+	r.ParseMultipartForm(10 << 20) // 10 MB (n << x is n times 2, x times)
+	file, handler, err := r.FormFile("selectedImage")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	defer file.Close()
 
-	tempFile, err := ioutil.TempFile("temp-images", "upload-*.png")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	defer tempFile.Close()
+	filename := handler.Filename
 
 	fileBytes, err := ioutil.ReadAll(file)
 	if err != nil {
@@ -40,6 +36,7 @@ func uploadImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tempFile.Write(fileBytes)
-	fmt.Fprintf(w, "Successfully Uploaded File\n")
+	uploadPath := filepath.Join("uploads", filename)
+	ioutil.WriteFile(uploadPath, fileBytes, 0644)
+	fmt.Printf("Successfully Uploaded %+v\n", handler.Filename)
 }
