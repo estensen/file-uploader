@@ -17,7 +17,7 @@ func setupRoutes() {
 }
 
 func uploadImage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Uploading Image")
+	fmt.Fprintf(w, "Uploading Image\n")
 
 	r.ParseMultipartForm(10 << 20)
 	file, _, err := r.FormFile("selectedImage")
